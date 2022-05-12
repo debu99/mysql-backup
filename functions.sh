@@ -219,6 +219,10 @@ function backup_target() {
       [[ -n "$AWS_ENDPOINT_URL" ]] && AWS_ENDPOINT_OPT="--endpoint-url $AWS_ENDPOINT_URL"
       aws ${AWS_CLI_OPTS} ${AWS_ENDPOINT_OPT} s3 cp ${TMPDIR}/${SOURCE} "${DB_DUMP_TARGET}/${TARGET}"
       ;;
+    "gs")
+      date=$(date +"%Y%m%d")
+      gsutil ${GCP_CLI_OPTS} cp ${TMPDIR}/${SOURCE} "${DB_DUMP_TARGET}/${date}/${TARGET}"
+      ;;
     "smb")
       if [[ -n "$SMB_USER" ]]; then
         UPASSARG="-U"

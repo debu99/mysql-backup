@@ -4,10 +4,13 @@ MAINTAINER Avi Deitcher <https://github.com/deitch>
 
 # install the necessary client
 # the mysql-client must be 10.3.15 or later
-RUN apk add --update 'mariadb-client>10.3.15' mariadb-connector-c bash python3 samba-client shadow openssl coreutils && \
+RUN apk add --update 'mariadb-client>10.3.15' mariadb-connector-c bash python3 py3-pip py3-cffi py3-cryptography samba-client shadow openssl coreutils && \
+    apk add --virtual build-deps gcc libffi-dev python3-dev linux-headers musl-dev openssl-dev && \
+    pip install --upgrade pip && \
+    pip3 install awscli gsutil && \
+    apk del build-deps && \
     rm -rf /var/cache/apk/* && \
-    touch /etc/samba/smb.conf && \
-    pip3 install awscli
+    touch /etc/samba/smb.conf
 
 # set us up to run as non-root user
 RUN groupadd -g 1005 appuser && \
@@ -19,6 +22,9 @@ USER appuser
 # install the entrypoint
 COPY functions.sh /
 COPY entrypoint /entrypoint
+COPY files/.boto /home/appuser/.boto
+COPY scripts.d/post-backup/*.sh /scripts.d/post-backup/
+RUN chmod +x /scripts.d/post-backup/*.sh
 
 # start
 ENTRYPOINT ["/entrypoint"]
