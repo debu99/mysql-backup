@@ -22,9 +22,9 @@ USER appuser
 # install the entrypoint
 COPY functions.sh /
 COPY entrypoint /entrypoint
-COPY files/.boto /home/appuser/.boto
-COPY scripts.d/post-backup/*.sh /scripts.d/post-backup/
-RUN chmod +x /scripts.d/post-backup/*.sh
+COPY --chown=appuser files/.boto /home/appuser/.boto
+COPY --chown=appuser scripts.d/post-backup/*.sh /scripts.d/post-backup/
+RUN chmod +x scripts.d/post-backup/*.sh
 
 # start
 ENTRYPOINT ["/entrypoint"]
