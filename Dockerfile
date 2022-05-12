@@ -4,10 +4,10 @@ MAINTAINER Avi Deitcher <https://github.com/deitch>
 
 # install the necessary client
 # the mysql-client must be 10.3.15 or later
-RUN apk add --update 'mariadb-client>10.3.15' mariadb-connector-c bash python3 py3-pip py3-cffi py3-cryptography samba-client shadow openssl coreutils && \
-    apk add --virtual build-deps gcc libffi-dev python3-dev linux-headers musl-dev openssl-dev && \
-    pip install --upgrade pip && \
-    pip3 install awscli gsutil && \
+RUN apk add --no-cache --update 'mariadb-client>10.3.15' mariadb-connector-c bash python3 py3-pip py3-cffi py3-cryptography samba-client shadow openssl coreutils && \
+    apk add --no-cache --virtual build-deps gcc libffi-dev python3-dev linux-headers musl-dev openssl-dev && \
+    pip3 install --no-cache-dir --upgrade pip && \
+    pip3 install --no-cache-dir awscli gsutil && \
     apk del build-deps && \
     rm -rf /var/cache/apk/* && \
     touch /etc/samba/smb.conf
